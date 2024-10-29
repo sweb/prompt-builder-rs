@@ -1,0 +1,16 @@
+[package]
+name = "prompt-builder-rs"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "pb"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.3", features = ["derive"] }
+directories = "5.0"
+ignore = "0.4.23"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0.12"
