@@ -36,7 +36,10 @@ enum Commands {
         files: Vec<String>,
     },
     /// Lists the files currently in the state
-    List,
+    List {
+        #[arg(short, long)]
+        long: bool,
+    },
     /// Clears the state
     Clear,
     /// Prints the file contents
@@ -111,7 +114,7 @@ fn run() -> Result<(), AppError> {
 
     match cli.command {
         Commands::Add { files } => handle_add(&mut state, files)?,
-        Commands::List => handle_list(&state),
+        Commands::List { long } => handle_list(&state, long),
         Commands::Clear => handle_clear(&mut state)?,
         Commands::Print => handle_print(&state)?,
         Commands::Info => {
@@ -163,17 +166,21 @@ fn handle_add(state: &mut State, patterns: Vec<String>) -> Result<(), AppError> 
     Ok(())
 }
 
-fn handle_list(state: &State) {
+fn handle_list(state: &State, long: bool) {
     if state.files.is_empty() {
         println!("No files have been added yet.");
     } else {
         println!("Files in state:");
         for file in &state.files {
-            println!(
-                "- {} ({})",
-                file.relative_path,
-                file.absolute_path.to_string_lossy().into_owned()
-            );
+            if long {
+                println!(
+                    "- {} ({})",
+                    file.relative_path,
+                    file.absolute_path.to_string_lossy().into_owned()
+                );
+            } else {
+                println!("- {}", file.relative_path)
+            }
         }
     }
 }
